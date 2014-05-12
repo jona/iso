@@ -16,7 +16,11 @@ module ISO
       end
 
       def self.identify(full_code)
-        full_code =~ /-(\d{3})$/ ? find($1) : nil
+        code = full_code[/(?<=-)(\d{3})$/]
+        if code
+          found = YAML.load_file(DEFINITIONS_FILE)[code]
+          found['iso_code'] if found
+        end
       end
     end
   end
