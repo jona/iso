@@ -22,6 +22,7 @@ module ISO
           found['iso_code'] if found
         end
       end
+      singleton_class.send(:alias_method, :find, :identify)
     end
   end
 end

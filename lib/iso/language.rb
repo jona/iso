@@ -28,11 +28,13 @@ class ISO::Language < ISO::Subtag
 
   def self.identify(full_code, response={})
     code = full_code.split('-').first
-    YAML.load_file(DEFINITIONS_FILE)[code.downcase].each do |key, value|
+    YAML.load_file(DEFINITIONS_FILE)[code.downcase].try(:each) do |key, value|
       response.merge! key.to_sym => value
     end
-    response.merge! code: code
+    response.merge!(code: code).has_key?(:name) ? response : nil
   end
+
+  singleton_class.send(:alias_method, :find, :identify)
 
 private
   def i18n_scope

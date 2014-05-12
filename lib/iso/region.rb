@@ -3,9 +3,10 @@ class ISO::Region < ISO::Subtag
 
   def self.identify(full_code)
     # Temporarily going against standard to allow lowercase matching of region codes
-    code = full_code[/(?<=[-_])([A-Za-z]{2})$/]
+    code = full_code[/(?<=[-_])?([A-Za-z]{2})$/]
     code if code && YAML.load_file(DEFINITIONS_FILE).keys.include?(code.upcase)
   end
+  singleton_class.send(:alias_method, :find, :identify)
 
 private
 
