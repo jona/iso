@@ -1,5 +1,6 @@
 class ISO::Language < ISO::Subtag
   DEFINITIONS_FILE          = "#{File.dirname(__FILE__)}/../../data/iso-639-3-639-1.yml"
+  YAML_FILE                 = YAML.load_file(DEFINITIONS_FILE)
   ALL_LANGUAGES             = "#{File.dirname(__FILE__)}/../../languages.yml"
   MAPPING_FILE              = "#{File.dirname(__FILE__)}/../../data/iso-639-1-639-3-mapping.yml"
   DEFAULT_PLURAL_RULE_NAMES = %w(one other)
@@ -27,7 +28,7 @@ class ISO::Language < ISO::Subtag
 
   def self.identify(full_code, response={})
     code = full_code.split('-').first
-    YAML.load_file(DEFINITIONS_FILE)[code.downcase].try(:each) do |key, value|
+    YAML_FILE[code.downcase].try(:each) do |key, value|
       response.merge! key.to_sym => value
     end
     response.merge!(code: code).has_key?(:name) ? response : nil
