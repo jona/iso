@@ -16,9 +16,8 @@ class ISO::Language < ISO::Subtag
   end
 
   def self.all_tags
-
-    @all_tags ||= YAML.load_file(ISO::Language::ALL_LANGUAGES).map do |lang|
-      {name: lang[:name], code: lang[:iso_639_3]}
+    @all_tags ||= YAML.load_file(DEFINITIONS_FILE).map do |lang, options|
+      {name: options['name'], code: lang}
     end
   end
 
