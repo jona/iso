@@ -1,5 +1,6 @@
 class ISO::Language < ISO::Subtag
   DEFINITIONS_FILE          = "#{File.dirname(__FILE__)}/../../data/iso-639-3.yml"
+  DEFINITIONS_FILE_2        = "#{File.dirname(__FILE__)}/../../data/iso-639-1.yml"
   MAPPING_FILE              = "#{File.dirname(__FILE__)}/../../data/iso-639-1-639-3-mapping.yml"
   DEFAULT_PLURAL_RULE_NAMES = %w(one other)
   DEFAULT_DIRECTION         = 'ltr'
@@ -15,9 +16,17 @@ class ISO::Language < ISO::Subtag
   end
 
   def self.all_tags
-    @all_tags ||= YAML.load_file(DEFINITIONS_FILE).map do |code, options|
-      {code => options["name"]}
+    @all_tags ||= load_tag_files.map do |code, options|
+      {code: code, name: options['name']}
     end
+  end
+
+  def self.load_tag_files(tags={}, i18n_scope='vendor.iso.languages')
+    YAML.load_file(DEFINITIONS_FILE_2).map do |t|
+      name = I18n.t(t.first, scope: i18n_scope)
+      tags.merge! t.first => {'name'=> name}
+    end
+    tags.merge! YAML.load_file(DEFINITIONS_FILE)
   end
 
   def self.convert_639_1_to_639_3(code)
