@@ -1,7 +1,7 @@
 module ISO
   module UN
     class Region < ISO::Region
-      DEFINITIONS_FILE = "#{File.dirname(__FILE__)}/../../../data/un-m49.yml"
+      DEFINITIONS_FILE = YAML.load_file("#{File.dirname(__FILE__)}/../../../data/un-m49.yml")
 
       attr_reader :iso_code
 
@@ -18,7 +18,7 @@ module ISO
       def self.identify(full_code)
         code = full_code[/(?<=-)(\d{3})$/]
         if code
-          found = YAML.load_file(DEFINITIONS_FILE)[code]
+          found = DEFINITIONS_FILE[code]
           found['iso_code'] if found
         end
       end

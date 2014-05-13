@@ -7,9 +7,9 @@ module ISO
       @options = options
     end
 
-    def ==(object)
-      code == object.code
-    end
+    # def ==(object)
+    #   code == object.code
+    # end
 
     def name
       @options[:name] || I18n.t(code, :scope => i18n_scope)
