@@ -22,5 +22,9 @@ module ISO
       self.regions.empty? ? self.normalize : "#{self.normalize}-#{self.regions.join('-')}"
     end
 
+    def direction
+      self.language ? (self.language[:direction] ? self.language[:direction] : "ltr") : "ltr"
+    end
+
   end
 end
